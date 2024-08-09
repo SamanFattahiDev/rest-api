@@ -2,26 +2,33 @@ const express = require('express')
 const {response} = require("express");
 const router = express.Router();
 const userService = require('../services/user')
-/**
- * @swagger
- * /api/products/{id}:
- *   get:
- *     summary: Retrieve a product by ID
- *     tags: [Products]
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         schema:
- *           type: string
- *         description: Product ID
- *     responses:
- *       200:
- *         description: A product object
- *       404:
- *         description: Product not found
- */
-router.get('/get', userService.getUser)
+const {userValidate} = require("../middlewares/SchemaValidator");
+const {userSchemaValidator} = require("../models/userModels");
+const {userCreateSchemaValidator} = require("../validators/userValidators");
+// /**
+//  * @swagger
+//  * /Users/:
+//  *   get:
+//  *     summary:get all users
+//  *     tags: Users
+//  *     parameters:
+//  *       - in: path
+//  *         name: id
+//  *         required: true
+//  *         schema:
+//  *           type: string
+//  *         description: Product ID
+//  *     responses:
+//  *       200:
+//  *         description: A product object
+//  *       404:
+//  *         description: Product not found
+//  */
+router.get('/', userService.getAllUser)
+router.get('/:id', userService.getUser)
+router.post('/Create',userValidate(userCreateSchemaValidator),userService.createUser)
+router.put('/Update/:id', userService.updateUser)
+router.delete('/Delete/:id', userService.deleteUser)
 
 
 module.exports = router
