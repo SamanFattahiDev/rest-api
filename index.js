@@ -7,7 +7,7 @@ const {closeSQLConnection} = require("./middlewares/globalMiddlewares");
 // Sync the database and create tables if they don't exist
 (async () => {
     try {
-        await db.sequelize.sync(); // Sync models with database
+        await db.sequelize.sync({ alter: true }); // Sync models with database
         console.log('Database & tables created!');
     } catch (error) {
         console.error('Error during database sync:', error);
@@ -18,5 +18,5 @@ app.use(closeSQLConnection);
 
 
 app.listen(serverConfig.serverConfig.port, () => {
-    console.log(`Example app listening on port ${serverConfig.serverConfig.port}!`);
+    console.log(` app listening on port ${serverConfig.serverConfig.port}!`);
 });

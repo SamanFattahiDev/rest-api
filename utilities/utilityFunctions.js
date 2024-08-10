@@ -1,6 +1,6 @@
 const bcrypt = require('bcryptjs');
 const saltRounds = 10
-
+const jwt = require('jsonwebtoken')
 async function generateSalt(userPassword) {
     try {
         const salt = await bcrypt.genSalt(saltRounds);
@@ -12,6 +12,17 @@ async function generateSalt(userPassword) {
     }
 }
 
+async function generateToken  (payload) {
+    const secretKey = process.env.JWT_SECRET; // Replace with your own secret key
+    const options = {
+        expiresIn: '1h', // Token expiration time
+    };
+
+    const token = jwt.sign(payload, secretKey, options);
+    return token;
+};
+
 
 module.exports.generateSalt = generateSalt
+module.exports.generateToken = generateToken
 

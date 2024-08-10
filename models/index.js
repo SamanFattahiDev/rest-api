@@ -1,7 +1,8 @@
 const { Sequelize, DataTypes } = require('sequelize');
+const path = require('path')
 const sequelize = new Sequelize({
     dialect: 'sqlite',
-    storage: '../database.db',
+    storage:  path.resolve(__dirname, '../database.db'),
     logging:true
 });
 // Test the connection

@@ -26,11 +26,16 @@ const getAllUser = async (req, res) => {
     }
 }
 const createUser = async (req, res) => {
+    console.log(req.body)
     try {
         const hashedPassword = await generateSalt(req.body.password);
         const user = req.body
         user.password = hashedPassword
-        await User.create(user);
+        await User.create({
+            ...user,
+            createdAt:new Date(Date.now()),
+            updatedAt:new Date(Date.now())
+        });
         res.json(new ServiceResult({
             message: 'کاربر با موفقیت ایجاد شد'
         }).ok())
