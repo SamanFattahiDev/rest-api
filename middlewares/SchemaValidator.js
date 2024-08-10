@@ -13,4 +13,4 @@ const validate = (schema) => async (req, res, next) => {
     }
 };
 
-module.exports.userValidate = validate
+module.exports.schemaValidator = validate
