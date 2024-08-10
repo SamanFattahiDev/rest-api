@@ -1,0 +1,29 @@
+const jwt = require('jsonwebtoken')
+const validateToken = (req, res, next) => {
+    const authHeader = req.headers.authorization;
+
+    if (authHeader) {
+        const token = authHeader // Bearer <token>
+
+        jwt.verify(token, process.env.JWT_SECRET, (err, payload) => {
+            if (err) {
+                return res.status(403).json({
+                    success: false,
+                    message: 'Invalid token',
+                });
+            }
+            else {
+                req.user = payload;
+                next();
+            }
+        });
+    }
+    else {
+        res.status(401).json({
+            success: false,
+            message: 'Token is not provided',
+        });
+    }
+};
+
+module.exports.verifyJwt = validateToken
