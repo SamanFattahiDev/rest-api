@@ -8,7 +8,7 @@ const signJwtToken = async (req, res) => {
     const userDB = await User.findOne({where: {mobile: mobile}})
     if (userDB) {
         const match = await bcrypt.compare(password, userDB.password);
-        if(match){
+        if (match) {
             const token = await generateToken({
                 id: userDB.id,
                 firstName: userDB.firstName,
@@ -19,34 +19,16 @@ const signJwtToken = async (req, res) => {
             res.json(new ServiceResult({
                 data: token
             }).ok())
-        }
-        else {
+        } else {
             res.json(new ServiceResult({
                 message: 'رمز عبور یا شماره موبایل صحیح نیست'
             }).failure())
         }
-    }
-    else {
+    } else {
         res.json(new ServiceResult({
             message: 'کاربری یافت نشد'
         }).failure())
     }
-    // Check if username and password match
-//     if (username === user.username && password === user.password) {
-//         // Generate JWT token
-//         const token = generateToken(user);
-//
-//         res.json({
-//             success: true,
-//             message: 'Authentication successful!',
-//             token: token,
-//         });
-//     } else {
-//         res.status(401).json({
-//             success: false,
-//             message: 'Invalid username or password',
-//         });
-//     }
 }
 
 

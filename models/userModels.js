@@ -33,6 +33,8 @@ const User = sequelize.define('User', {
         allowNull: false,
         defaultValue: DataTypes.NOW,
     }
+}, {
+    tableName: 'User', // Ensure it's set to the correct table name
 });
 
 module.exports = User;
