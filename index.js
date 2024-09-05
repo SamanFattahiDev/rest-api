@@ -3,7 +3,7 @@ require("dotenv").config();
 const serverConfig = require('./server')
 const db = require('./models/index');
 const {closeSQLConnection} = require("./middlewares/globalMiddlewares");
-
+const {rabbitInstance} = require("./services/rabbitMQ");
 // Sync the database and create tables if they don't exist
 (async () => {
     try {
@@ -15,8 +15,7 @@ const {closeSQLConnection} = require("./middlewares/globalMiddlewares");
 })();
 
 app.use(closeSQLConnection);
-
-
+rabbitInstance.connect()
 app.listen(serverConfig.serverConfig.port, () => {
     console.log(` app listening on port ${serverConfig.serverConfig.port}!`);
 });

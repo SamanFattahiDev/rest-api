@@ -26,7 +26,7 @@ const getAllUser = async (req, res) => {
     }
 }
 const createUser = async (req, res) => {
-    console.log(req.body)
+
     try {
         const hashedPassword = await generateSalt(req.body.password);
         const user = req.body

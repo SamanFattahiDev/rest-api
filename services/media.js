@@ -2,7 +2,12 @@ const {ServiceResult} = require("../utilities/ServiceResult");
 const sharp = require('sharp')
 const fs = require('fs')
 const path = require('path')
-const {generateRandomName} = require("../utilities/utilityFunctions");
+const {
+    generateRandomName,
+    generateWebpBuffer,
+    getRootDir,
+    convertFileToWebp
+} = require("../utilities/utilityFunctions");
 const Media = require("../models/mediaModels");
 const mimeInfos = {
     'image/': {
@@ -103,7 +108,36 @@ const saveInModel = async (fileName) => {
         console.log(e)
     }
 }
+
+const uploadInGallery = async (file) => {
+    const webpFile = await convertFileToWebp(file)
+    currentMediaType = getMediaType(webpFile.mimetype).type
+    const mediaDir = path.join(getRootDir(), `Media${getMediaType(webpFile.mimetype).path}`);
+    await fs.mkdir(mediaDir, {recursive: true}, () => {
+    })
+
+    // Generate a unique filename with extension
+    const randomName = `${generateRandomName()}.${webpFile.originalname.split('.')[1]}`;
+    const filePath = path.join(mediaDir, randomName);
+    // Save the file
+    await fs.writeFile(filePath, webpFile.buffer, (err) => {
+    });
+
+
+    try {
+        await Media.create({
+            guid: randomName,
+            type: currentMediaType,
+            hasWatermark: false,
+            isDeleted: false,
+        });
+        return randomName
+    } catch (e) {
+        console.log(e)
+    }
+}
 module.exports = {
     handleUploadedFile,
-    getAllMedia
+    getAllMedia,
+    uploadInGallery
 }

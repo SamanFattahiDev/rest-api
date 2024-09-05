@@ -1,6 +1,8 @@
 const bcrypt = require('bcryptjs');
 const saltRounds = 10
 const jwt = require('jsonwebtoken')
+const sharp = require("sharp");
+const path = require("path");
 
 async function generateSalt(userPassword) {
     try {
@@ -27,8 +29,32 @@ function generateRandomName() {
     return new Date().getTime().toString()
 }
 
+async function convertFileToWebp(file) {
+    const webpBuffer = await sharp(file.buffer)
+        .resize(200)
+        .toBuffer()
+    file.buffer = webpBuffer
+    const splitedName = file.originalname.split('.')
+    file.originalname = `${splitedName[0]}.webp`
+
+    return file
+}
+
+function getCurrentDir() {
+    return path.join(__dirname);
+
+}
+
+function getRootDir() {
+    return path.join(__dirname, '../'); // Moving up one level to root
+
+}
+
 module.exports = {
     generateSalt,
     generateToken,
-    generateRandomName
+    generateRandomName,
+    convertFileToWebp,
+    getRootDir,
+    getCurrentDir
 }
